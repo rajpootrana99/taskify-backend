@@ -37,5 +37,33 @@ app.use((err, _req, res, _next) => {
   res.status(err.status || 500).json({ message: err.message || 'Internal server error' });
 });
 
+app.get('/', (req, res) => {
+  res.send(`
+    <html lang="en">
+      <head>
+        <title>Taskify Backend Status</title>
+        <style>
+          body { font-family: 'Inter', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: #f9fafb; }
+          .message-window { background: white; padding: 3rem; border-radius: 12px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); text-align: center; border-top: 4px solid #10b981; }
+          h1 { color: #111827; margin: 0 0 1rem 0; font-size: 24px; }
+          p { color: #6b7280; margin: 0; font-size: 16px; }
+          .icon { font-size: 48px; margin-bottom: 1rem; }
+        </style>
+      </head>
+      <body>
+        <div class="message-window">
+          <div class="icon">🚀</div>
+          <h1>Backend Successfully Running!</h1>
+          <p>The Taskify API server is deployed and fully operational.</p>
+        </div>
+      </body>
+    </html>
+  `);
+});
+
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+}
+
+module.exports = app;
