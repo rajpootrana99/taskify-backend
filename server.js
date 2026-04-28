@@ -14,12 +14,23 @@ const logRoutes = require('./routes/logRoutes');
 const app = express();
 
 // Connect to MongoDB
-connectDB();
+// Removed top level call, using middleware instead
 
 // ─── Middleware ────────────────────────────────────────────────────────────────
 app.use(cors());
 app.use(express.json());
 app.use(morgan('dev'));
+
+// Ensure DB connection before handling any routes
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (error) {
+    console.error('DB Connection Middleware Error:', error);
+    next(error);
+  }
+});
 
 // ─── Routes ───────────────────────────────────────────────────────────────────
 app.use('/api/auth', authRoutes);
